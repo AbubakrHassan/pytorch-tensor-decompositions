@@ -63,14 +63,15 @@ def estimate_ranks(layer):
     return ranks
 
 
-def tucker_decomposition_conv_layer(layer):
+def tucker_decomposition_conv_layer(layer, ranks=None):
     """ Gets a conv layer, 
         returns a nn.Sequential object with the Tucker decomposition.
         The ranks are estimated with a Python implementation of VBMF
         https://github.com/CasvandenBogaard/VBMF
     """
 
-    ranks = estimate_ranks(layer)
+    if ranks is None:
+        ranks = estimate_ranks(layer)
     print(layer, "VBMF Estimated ranks", ranks)
     core, [last, first] = \
         partial_tucker(layer.weight.data.numpy(),
